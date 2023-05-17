@@ -1,0 +1,29 @@
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import javax.security.auth.login.LoginException;
+
+public class MeuBot extends ListenerAdapter {
+
+    public static void main(String[] args) throws LoginException {
+        JDABuilder builder = JDABuilder.createDefault("SEU_TOKEN_AQUI");
+        builder.addEventListeners(new MeuBot());
+        builder.setStatus(OnlineStatus.ONLINE);
+        builder.setActivity(Activity.watching("você!"));
+        builder.build();
+    }
+
+    @Override
+    public void onMessageReceived(MessageReceivedEvent event) {
+        if (event.getAuthor().isBot()) {
+            return;
+        }
+
+        String mensagem = event.getMessage().getContentRaw();
+        if (mensagem.equals("!ping")) {
+            event.getChannel().sendMessage("Pong!").queue();
+        }
+    }
+}
